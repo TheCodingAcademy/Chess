@@ -13,6 +13,15 @@ public class King : ChessPieceLogic
     {
         bool[,] possibleMoves = new bool[BoardManager.BOARDSIZE, BoardManager.BOARDSIZE];
 
+        ActivateCell(possibleMoves, x - 1, y, gameState);
+        ActivateCell(possibleMoves, x + 1, y, gameState);
+        ActivateCell(possibleMoves, x, y - 1, gameState);
+        ActivateCell(possibleMoves, x, y + 1, gameState);
+        ActivateCell(possibleMoves, x + 1, y + 1, gameState);
+        ActivateCell(possibleMoves, x + 1, y - 1, gameState);
+        ActivateCell(possibleMoves, x - 1, y + 1, gameState);
+        ActivateCell(possibleMoves, x - 1, y - 1, gameState);
+
         return possibleMoves;
     }
 }
