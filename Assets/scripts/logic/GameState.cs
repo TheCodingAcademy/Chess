@@ -12,6 +12,11 @@ public class GameState
         InstantiateChessPieces();
     }
 
+    public GameState(ChessPieceLogic[,] chessPieces)
+    {
+        this.chessPieces = chessPieces;
+    }
+
     public bool[, ] GetPossibleMoves(int x, int y)
     {
         return chessPieces[x, y].GetMoves(this);
@@ -23,13 +28,27 @@ public class GameState
         InstantiateBlackPieces();
     }
 
-    public void Move(int prevX, int prevY, int nextX, int nextY)
+    public GameState Move(int prevX, int prevY, int nextX, int nextY)
     {
-        ChessPieceLogic tmp = chessPieces[prevX, prevY];
-        chessPieces[nextX, nextY] = tmp;
-        chessPieces[prevX, prevY] = null;
+        ChessPieceLogic[,] newChessPieces = new ChessPieceLogic[BoardManager.BOARDSIZE, BoardManager.BOARDSIZE];
+        for(int x=0; x<BoardManager.BOARDSIZE; x++)
+        {
+            for (int y = 0; y < BoardManager.BOARDSIZE; y++)
+            {
+                if(chessPieces[x, y] != null)
+                {
+                    newChessPieces[x, y] = chessPieces[x, y].Clone();
+                }
+            }
+        }
+
+        ChessPieceLogic tmp = newChessPieces[prevX, prevY];
+        newChessPieces[nextX, nextY] = tmp;
+        newChessPieces[prevX, prevY] = null;
 
         tmp.Move(nextX, nextY);
+
+        return new GameState(newChessPieces);
     }
 
     private void InstantiateWhitePieces()
@@ -67,5 +86,95 @@ public class GameState
         {
             chessPieces[i, BoardManager.BOARDSIZE - 2] = new Pawn(i, BoardManager.BOARDSIZE - 2, false);
         }
+    }
+
+    private List<ChessPieceLogic> GetWhitePieces()
+    {
+        List<ChessPieceLogic> pieces = new List<ChessPieceLogic>();
+
+        for (int x = 0; x < BoardManager.BOARDSIZE; x++)
+        {
+            for (int y = 0; y < BoardManager.BOARDSIZE; y++)
+            {
+                if ((chessPieces[x, y] != null) && (chessPieces[x, y].is_white))
+                {
+                    pieces.Add(chessPieces[x, y]);
+                }
+            }
+        }
+
+        return pieces;
+    }
+
+    private List<ChessPieceLogic> GetBlackPieces()
+    {
+        List<ChessPieceLogic> pieces = new List<ChessPieceLogic>();
+
+        for (int x = 0; x < BoardManager.BOARDSIZE; x++)
+        {
+            for (int y = 0; y < BoardManager.BOARDSIZE; y++)
+            {
+                if ((chessPieces[x, y] != null) && (!chessPieces[x, y].is_white))
+                {
+                    pieces.Add(chessPieces[x, y]);
+                }
+            }
+        }
+
+        return pieces;
+    }
+
+    private King GetBlackKing()
+    {
+        King blackKing = null;
+
+        for(int x=0; x<BoardManager.BOARDSIZE; x++)
+        {
+            for (int y = 0; y < BoardManager.BOARDSIZE; y++)
+            {
+                if((chessPieces[x, y] != null) && (chessPieces[x, y] is King) && (!chessPieces[x, y].is_white))
+                {
+                    blackKing = (King)chessPieces[x, y];
+                    return blackKing;
+                }
+            }
+        }
+
+        return blackKing;
+    }
+
+    private King GetWhiteKing()
+    {
+        King whiteKing = null;
+
+        for (int x = 0; x < BoardManager.BOARDSIZE; x++)
+        {
+            for (int y = 0; y < BoardManager.BOARDSIZE; y++)
+            {
+                if ((chessPieces[x, y] != null) && (chessPieces[x, y] is King) && (chessPieces[x, y].is_white))
+                {
+                    whiteKing = (King)chessPieces[x, y];
+                    return whiteKing;
+                }
+            }
+        }
+
+        return whiteKing;
+    }
+
+    public bool isInChess(bool isWhiteTurn)
+    {
+        List<ChessPieceLogic> otherPieces = isWhiteTurn ? GetBlackPieces() : GetWhitePieces();
+        King king = isWhiteTurn ? GetWhiteKing() : GetBlackKing();
+
+        foreach(ChessPieceLogic c in otherPieces)
+        {
+            bool[, ] possible_moves = c.GetMoves(this);
+            if(possible_moves[king.GetX(), king.GetY()])
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

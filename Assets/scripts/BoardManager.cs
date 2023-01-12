@@ -49,7 +49,8 @@ public class BoardManager : MonoBehaviour
         chessPieces[prevx, prevy] = null;
 
         // Update logic
-        gameState.Move(prevx, prevy, x, y);
+        gameState = gameState.Move(prevx, prevy, x, y);
+        Debug.Log(gameState.isInChess(false));
     }
 
     public void ShowPossibleMoves(bool[,] possibleMoves)
