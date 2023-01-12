@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Pawn : ChessPieceLogic
 {
-    public Pawn(int x, int y, bool is_white) : base(x, y, is_white)
-    {
-    }
+    public Pawn(int x, int y, bool is_white) : base(x, y, is_white){}
+    public Pawn(int x, int y, bool is_white, bool has_moved) : base(x, y, is_white, has_moved) { }
+
 
     public new bool ActivateCell(bool[,] possibleMoves, int x, int y, GameState gameState)
     {
@@ -35,23 +35,23 @@ public class Pawn : ChessPieceLogic
         }
 
         // Diagonal 1
-        if(gameState.chessPieces[x + (is_white ? 1 : -1), y + (is_white ? 1 : -1)] != null)
+        if (((x + (is_white ? 1 : -1)) >= 0) && ((x + (is_white ? 1 : -1)) < BoardManager.BOARDSIZE) && ((y + (is_white ? 1 : -1)) >= 0) && ((y + (is_white ? 1 : -1)) < BoardManager.BOARDSIZE))
         {
-            if (gameState.chessPieces[x + (is_white ? 1 : -1), y + (is_white ? 1 : -1)].is_white != this.is_white)
+            if (gameState.chessPieces[x + (is_white ? 1 : -1), y + (is_white ? 1 : -1)] != null)
             {
-                if (((x + (is_white ? 1 : -1)) >= 0) && ((x + (is_white ? 1 : -1)) < BoardManager.BOARDSIZE) && ((y + (is_white ? 1 : -1)) >= 0) && ((y + (is_white ? 1 : -1)) < BoardManager.BOARDSIZE))
+                if (gameState.chessPieces[x + (is_white ? 1 : -1), y + (is_white ? 1 : -1)].is_white != this.is_white)
                 {
-                    possibleMoves[x + (is_white ? 1 : -1), y + (is_white ? 1 : -1)] = true;
+                     possibleMoves[x + (is_white ? 1 : -1), y + (is_white ? 1 : -1)] = true;
                 }
             }
         }
 
         // Diagonal 2
-        if (gameState.chessPieces[x + (is_white ? -1 : 1), y + (is_white ? 1 : -1)] != null)
+        if (((x + (is_white ? -1 : 1)) >= 0) && ((x + (is_white ? -1 : 1)) < BoardManager.BOARDSIZE) && ((y + (is_white ? 1 : -1)) >= 0) && ((y + (is_white ? 1 : -1)) < BoardManager.BOARDSIZE))
         {
-            if (gameState.chessPieces[x + (is_white ? -1 : 1), y + (is_white ? 1 : -1)].is_white != this.is_white)
+            if (gameState.chessPieces[x + (is_white ? -1 : 1), y + (is_white ? 1 : -1)] != null)
             {
-                if (((x + (is_white ? -1 : 1)) >= 0) && ((x + (is_white ? -1 : 1)) < BoardManager.BOARDSIZE) && ((y + (is_white ? 1 : -1)) >= 0) && ((y + (is_white ? 1 : -1)) < BoardManager.BOARDSIZE))
+                if (gameState.chessPieces[x + (is_white ? -1 : 1), y + (is_white ? 1 : -1)].is_white != this.is_white)
                 {
                     possibleMoves[x + (is_white ? -1 : 1), y + (is_white ? 1 : -1)] = true;
                 }
@@ -60,4 +60,10 @@ public class Pawn : ChessPieceLogic
 
         return possibleMoves;
     }
+
+    public override ChessPieceLogic Clone()
+    {
+        return new Pawn(x, y, is_white, has_moved);
+    }
+
 }
