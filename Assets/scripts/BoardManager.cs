@@ -27,11 +27,13 @@ public class BoardManager : MonoBehaviour
     private ChessPiece[, ] chessPieces = new ChessPiece[BOARDSIZE, BOARDSIZE];
     private GameObject[,] cells = new GameObject[BOARDSIZE, BOARDSIZE];
     private ChessPiece selectedChessPiece = null;
+    GameState gameState;
 
-    private const int BOARDSIZE = 8;
+    public const int BOARDSIZE = 8;
 
     void Start()
     {
+        gameState = new GameState();
         InstantiateBoard();
         InstantiateChessPieces();
     }
@@ -43,10 +45,36 @@ public class BoardManager : MonoBehaviour
 
         // Update UI
         chessPiece.gameObject.transform.position = new Vector3(x, 0, y);
-
-        // Update logic
         chessPieces[x, y] = chessPiece;
         chessPieces[prevx, prevy] = null;
+
+        // Update logic
+        gameState.Move(prevx, prevy, x, y);
+    }
+
+    public void ShowPossibleMoves(bool[,] possibleMoves)
+    {
+        for(int x=0; x<BOARDSIZE; x++)
+        {
+            for (int y = 0; y < BOARDSIZE; y++)
+            {
+                if(possibleMoves[x, y])
+                {
+                    cells[x, y].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                }
+            }
+        }
+    }
+
+    public void ReinitializeColors()
+    {
+        for (int x = 0; x < BOARDSIZE; x++)
+        {
+            for (int y = 0; y < BOARDSIZE; y++)
+            {
+                cells[x, y].GetComponent<MeshRenderer>().material.color = Color.white;
+            }
+        }
     }
 
     /* Logic */
@@ -56,31 +84,34 @@ public class BoardManager : MonoBehaviour
         {
             selectedChessPiece = chessPieces[x, y];
 
-            if(selectedChessPiece != null)
+            if (selectedChessPiece != null)
             {
                 cells[x, y].GetComponent<MeshRenderer>().material.color = Color.green;
+                bool[,] possibleMoves = gameState.GetPossibleMoves(x, y);
+                ShowPossibleMoves(possibleMoves);
             }
         }
         else // A chess piece is already selected
         {
             if(chessPieces[x, y] == null)
             {
-                cells[selectedChessPiece.GetX(), selectedChessPiece.GetY()].GetComponent<MeshRenderer>().material.color = Color.white;
+                ReinitializeColors();
+                //cells[selectedChessPiece.GetX(), selectedChessPiece.GetY()].GetComponent<MeshRenderer>().material.color = Color.white;
                 Move(selectedChessPiece, x, y);
                 selectedChessPiece = null;
             }
             else // Changing selected piece
             {
-                cells[selectedChessPiece.GetX(), selectedChessPiece.GetY()].GetComponent<MeshRenderer>().material.color = Color.white;
+                ReinitializeColors();
+                //cells[selectedChessPiece.GetX(), selectedChessPiece.GetY()].GetComponent<MeshRenderer>().material.color = Color.white;
                 selectedChessPiece = chessPieces[x, y];
                 cells[x, y].GetComponent<MeshRenderer>().material.color = Color.green;
+                bool[,] possibleMoves = gameState.GetPossibleMoves(x, y);
+                ShowPossibleMoves(possibleMoves);
             }
         }
         
     }
-
-
-
 
     /*  Board setup  */
 
