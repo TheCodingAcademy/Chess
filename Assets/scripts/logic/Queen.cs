@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class Queen : ChessPieceLogic
 {
-    public Queen(int x, int y, bool is_white) : base(x, y, is_white)
-    {
+    public Queen(int x, int y, bool is_white) : base(x, y, is_white){}
+    public Queen(int x, int y, bool is_white, bool has_moved) : base(x, y, is_white, has_moved) { }
 
-    }
-
-    public override bool[,] GetMoves(GameState gameState)
+    public override bool[,] GetMoves(GameState gameState, bool isRecursive)
     {
         bool[,] possibleMoves = new bool[BoardManager.BOARDSIZE, BoardManager.BOARDSIZE];
 
@@ -20,7 +18,7 @@ public class Queen : ChessPieceLogic
         {
             for (int j = 1; j < 8; j++)
             {
-                bool success = ActivateCell(possibleMoves, x + j * scale_diagonals[i, 0], y + j * scale_diagonals[i, 1], gameState);
+                bool success = ActivateCell(possibleMoves, x + j * scale_diagonals[i, 0], y + j * scale_diagonals[i, 1], gameState, isRecursive);
                 if (!success)
                 {
                     break;
@@ -35,7 +33,7 @@ public class Queen : ChessPieceLogic
         {
             for (int j = 1; j < 8; j++)
             {
-                bool success = ActivateCell(possibleMoves, x + j * scale_forward[i, 0], y + j * scale_forward[i, 1], gameState);
+                bool success = ActivateCell(possibleMoves, x + j * scale_forward[i, 0], y + j * scale_forward[i, 1], gameState, isRecursive);
                 if (!success)
                 {
                     break;
@@ -44,5 +42,10 @@ public class Queen : ChessPieceLogic
         }
 
         return possibleMoves;
+    }
+
+    public override ChessPieceLogic Clone()
+    {
+        return new Queen(x, y, is_white, has_moved);
     }
 }

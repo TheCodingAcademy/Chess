@@ -169,7 +169,7 @@ public class GameState
 
         foreach(ChessPieceLogic c in otherPieces)
         {
-            bool[, ] possible_moves = c.GetMoves(this);
+            bool[, ] possible_moves = c.GetMoves(this, true);
             if(possible_moves[king.GetX(), king.GetY()])
             {
                 return true;

@@ -8,30 +8,39 @@ public class Pawn : ChessPieceLogic
     public Pawn(int x, int y, bool is_white, bool has_moved) : base(x, y, is_white, has_moved) { }
 
 
-    public new bool ActivateCell(bool[,] possibleMoves, int x, int y, GameState gameState)
+    public new bool ActivateCell(bool[,] possibleMoves, int nextX, int nextY, GameState gameState, bool isRecursive)
     {
-        if ((x >= 0) && (x < BoardManager.BOARDSIZE) && (y >= 0) && (y < BoardManager.BOARDSIZE))
+        if ((nextX >= 0) && (nextX < BoardManager.BOARDSIZE) && (nextY >= 0) && (nextY < BoardManager.BOARDSIZE))
         {
-            if ((gameState.chessPieces[x, y] == null))
+            if ((gameState.chessPieces[nextX, nextY] == null))
             {
-                possibleMoves[x, y] = true;
+                possibleMoves[nextX, nextY] = true;
+
+                if (!isRecursive)
+                {
+                    GameState newGameState = gameState.Move(x, y, nextX, nextY);
+                    if (newGameState.isInChess(is_white))
+                    {
+                        possibleMoves[nextX, nextY] = false;
+                    }
+                }
             }
 
-            return gameState.chessPieces[x, y] == null;
+            return gameState.chessPieces[nextX, nextY] == null;
         }
 
         return false;
     }
 
-    public override bool[,] GetMoves(GameState gameState)
+    public override bool[,] GetMoves(GameState gameState, bool isRecursive)
     {
         bool[,] possibleMoves = new bool[BoardManager.BOARDSIZE, BoardManager.BOARDSIZE];
 
         // Forward
-        bool success = ActivateCell(possibleMoves, x, y + (is_white ? 1 : -1), gameState);
+        bool success = ActivateCell(possibleMoves, x, y + (is_white ? 1 : -1), gameState, isRecursive);
         if(success && !has_moved)
         {
-            ActivateCell(possibleMoves, x, y + (is_white ? 2 : -2), gameState);
+            ActivateCell(possibleMoves, x, y + (is_white ? 2 : -2), gameState, isRecursive);
         }
 
         // Diagonal 1
@@ -41,7 +50,16 @@ public class Pawn : ChessPieceLogic
             {
                 if (gameState.chessPieces[x + (is_white ? 1 : -1), y + (is_white ? 1 : -1)].is_white != this.is_white)
                 {
-                     possibleMoves[x + (is_white ? 1 : -1), y + (is_white ? 1 : -1)] = true;
+                    possibleMoves[x + (is_white ? 1 : -1), y + (is_white ? 1 : -1)] = true;
+
+                    if (!isRecursive)
+                    {
+                        GameState newGameState = gameState.Move(x, y, x + (is_white ? 1 : -1), y + (is_white ? 1 : -1));
+                        if (newGameState.isInChess(is_white))
+                        {
+                            possibleMoves[x + (is_white ? 1 : -1), y + (is_white ? 1 : -1)] = false;
+                        }
+                    }
                 }
             }
         }
@@ -54,6 +72,15 @@ public class Pawn : ChessPieceLogic
                 if (gameState.chessPieces[x + (is_white ? -1 : 1), y + (is_white ? 1 : -1)].is_white != this.is_white)
                 {
                     possibleMoves[x + (is_white ? -1 : 1), y + (is_white ? 1 : -1)] = true;
+
+                    if (!isRecursive)
+                    {
+                        GameState newGameState = gameState.Move(x, y, x + (is_white ? -1 : 1), y + (is_white ? 1 : -1));
+                        if (newGameState.isInChess(is_white))
+                        {
+                            possibleMoves[x + (is_white ? -1 : 1), y + (is_white ? 1 : -1)] = false;
+                        }
+                    }
                 }
             }
         }
