@@ -151,14 +151,14 @@ public class BoardManager : MonoBehaviour
         chessPieces[BOARDSIZE - 3, 0] = go.GetComponent<ChessPiece>();
 
         // King
-        go = Instantiate(whiteKing, new Vector3(3, 0.0f, 0), new Quaternion());
-        go.GetComponent<ChessPiece>().Instantiate(true, this);
-        chessPieces[3, 0] = go.GetComponent<ChessPiece>();
-
-        // Queen
-        go = Instantiate(whiteQueen, new Vector3(4, 0.0f, 0), new Quaternion());
+        go = Instantiate(whiteKing, new Vector3(4, 0.0f, 0), new Quaternion());
         go.GetComponent<ChessPiece>().Instantiate(true, this);
         chessPieces[4, 0] = go.GetComponent<ChessPiece>();
+
+        // Queen
+        go = Instantiate(whiteQueen, new Vector3(3, 0.0f, 0), new Quaternion());
+        go.GetComponent<ChessPiece>().Instantiate(true, this);
+        chessPieces[3, 0] = go.GetComponent<ChessPiece>();
 
         // Pawn
         for (int i = 0; i < BOARDSIZE; i++)
@@ -199,14 +199,14 @@ public class BoardManager : MonoBehaviour
         chessPieces[BOARDSIZE - 3, BOARDSIZE - 1] = go.GetComponent<ChessPiece>();
 
         // King
-        go = Instantiate(blackKing, new Vector3(3, 0.0f, BOARDSIZE - 1), new Quaternion());
-        go.GetComponent<ChessPiece>().Instantiate(false, this);
-        chessPieces[3, BOARDSIZE - 1] = go.GetComponent<ChessPiece>();
-
-        // Queen
-        go = Instantiate(blackQueen, new Vector3(4, 0.0f, BOARDSIZE - 1), new Quaternion());
+        go = Instantiate(blackKing, new Vector3(4, 0.0f, BOARDSIZE - 1), new Quaternion());
         go.GetComponent<ChessPiece>().Instantiate(false, this);
         chessPieces[4, BOARDSIZE - 1] = go.GetComponent<ChessPiece>();
+
+        // Queen
+        go = Instantiate(blackQueen, new Vector3(3, 0.0f, BOARDSIZE - 1), new Quaternion());
+        go.GetComponent<ChessPiece>().Instantiate(false, this);
+        chessPieces[3, BOARDSIZE - 1] = go.GetComponent<ChessPiece>();
 
         // Pawn
         for(int i=0; i<BOARDSIZE; i++)

@@ -59,8 +59,8 @@ public class GameState
         chessPieces[BoardManager.BOARDSIZE - 2, 0] = new Knight(BoardManager.BOARDSIZE - 2, 0, true);
         chessPieces[2, 0] = new Bishop(2, 0, true);
         chessPieces[BoardManager.BOARDSIZE - 3, 0] = new Bishop(BoardManager.BOARDSIZE - 3, 0, true);
-        chessPieces[3, 0] = new King(3, 0, true);
-        chessPieces[4, 0] = new Queen(4, 0, true);
+        chessPieces[4, 0] = new King(4, 0, true);
+        chessPieces[3, 0] = new Queen(3, 0, true);
 
         for(int i=0; i<BoardManager.BOARDSIZE; i++)
         {
@@ -79,8 +79,8 @@ public class GameState
         chessPieces[2, BoardManager.BOARDSIZE - 1] = new Bishop(2, BoardManager.BOARDSIZE - 1, false);
         chessPieces[BoardManager.BOARDSIZE - 3, BoardManager.BOARDSIZE - 1] = new Bishop(BoardManager.BOARDSIZE - 3,
             BoardManager.BOARDSIZE - 1, false);
-        chessPieces[3, BoardManager.BOARDSIZE - 1] = new King(3, BoardManager.BOARDSIZE - 1, false);
-        chessPieces[4, BoardManager.BOARDSIZE - 1] = new Queen(4, BoardManager.BOARDSIZE - 1, false);
+        chessPieces[4, BoardManager.BOARDSIZE - 1] = new King(4, BoardManager.BOARDSIZE - 1, false);
+        chessPieces[3, BoardManager.BOARDSIZE - 1] = new Queen(3, BoardManager.BOARDSIZE - 1, false);
 
         for (int i = 0; i < BoardManager.BOARDSIZE; i++)
         {
