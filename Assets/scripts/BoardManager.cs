@@ -47,6 +47,24 @@ public class BoardManager : MonoBehaviour
         chessPiece.gameObject.transform.position = new Vector3(x, 0, y);
         chessPieces[x, y] = chessPiece;
         chessPieces[prevx, prevy] = null;
+        // Rock
+        if(gameState.chessPieces[prevx, prevy] is King)
+        {
+            // Large Rock
+            if ((prevx - x) == 2)
+            {
+
+            }
+            // Small Rock
+            else if ((prevx - x) == -2)
+            {
+                ChessPiece rock = chessPieces[BOARDSIZE-1, prevy];
+                rock.gameObject.transform.position = new Vector3(x-1, 0, y);
+                chessPieces[x-1, y] = rock;
+                chessPieces[BOARDSIZE - 1, prevy] = null;
+            }
+        }
+
 
         // Update logic
         gameState = gameState.Move(prevx, prevy, x, y);

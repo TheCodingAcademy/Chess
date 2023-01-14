@@ -7,7 +7,7 @@ public abstract class ChessPieceLogic
     protected int x;
     protected int y;
     public bool is_white;
-    protected bool has_moved = false;
+    public bool has_moved = false;
 
 
     public int GetX()

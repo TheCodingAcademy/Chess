@@ -42,12 +42,30 @@ public class GameState
             }
         }
 
+        // ...
         ChessPieceLogic tmp = newChessPieces[prevX, prevY];
         newChessPieces[nextX, nextY] = tmp;
         newChessPieces[prevX, prevY] = null;
-
         tmp.Move(nextX, nextY);
 
+        if(tmp is King)
+        {
+            // Rock
+            // Large Rock
+            if ((prevX - nextX) == 2)
+            {
+
+            }
+            // Small Rock
+            else if ((prevX - nextX) == -2)
+            {
+                ChessPieceLogic rock = newChessPieces[BoardManager.BOARDSIZE - 1, prevY];
+                newChessPieces[nextX - 1, nextY] = rock;
+                newChessPieces[BoardManager.BOARDSIZE - 1, prevY] = null;
+                rock.Move(nextX - 1, nextY);
+            }
+        }
+        
         return new GameState(newChessPieces);
     }
 
@@ -164,13 +182,18 @@ public class GameState
 
     public bool isInChess(bool isWhiteTurn)
     {
-        List<ChessPieceLogic> otherPieces = isWhiteTurn ? GetBlackPieces() : GetWhitePieces();
         King king = isWhiteTurn ? GetWhiteKing() : GetBlackKing();
+        return isInChess(isWhiteTurn, king.GetX(), king.GetY());
+    }
 
-        foreach(ChessPieceLogic c in otherPieces)
+    public bool isInChess(bool isWhiteTurn, int x, int y)
+    {
+        List<ChessPieceLogic> otherPieces = isWhiteTurn ? GetBlackPieces() : GetWhitePieces();
+
+        foreach (ChessPieceLogic c in otherPieces)
         {
-            bool[, ] possible_moves = c.GetMoves(this, true);
-            if(possible_moves[king.GetX(), king.GetY()])
+            bool[,] possible_moves = c.GetMoves(this, true);
+            if (possible_moves[x, y])
             {
                 return true;
             }
